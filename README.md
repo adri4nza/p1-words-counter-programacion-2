@@ -1,4 +1,4 @@
-# Analizador de Frecuencia de Palabras en Angular
+# Analizador de frecuencia de palabras en Angular
 Este proyecto es una aplicación web desarrollada con el framework **Angular** que permite analizar la frecuencia de aparición de palabras en un archivo de texto `.in`, ignorando aquellas que estén en una lista de **palabras prohibidas** también contenida en un archivo `.in`.
 
 ## Autor del proyecto
