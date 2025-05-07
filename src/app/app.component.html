@@ -1,4 +1,10 @@
 
+<div class="navbar">
+  <h1>Práctica 1 - Programación 2 - Francisco Adrianza</h1>
+  <img class="logo" src="https://lh5.googleusercontent.com/proxy/yg5tkChJaQ_lRppQJtlb2DyZWy_YHvBYNDTtbOyfw8kqBy7yHRvqJ9XvndlC3Z1GUbE6z5JtkgoY5Po5TnavRxB5Ag4x" alt="logo_unet">
+
+</div>
+
 <div class="app">
 
   <form class="app-wrapper" [formGroup]="form">
@@ -6,9 +12,9 @@
     <hr>
 
     <div class="file-input" (click)="inputTexto.click()">
-      <label *ngIf="!inputTexto.value; else inputTextoLleno">Selecciona archivo de texto (.in):</label>
+      <label *ngIf="!inputTexto.value; else inputTextoLleno">Selecciona archivo de texto a evaluar (.in):</label>
       <ng-template #inputTextoLleno>
-        <label>Archivo seleccionado</label>
+        <label>Archivo seleccionado. Cambiar archivo</label>
       </ng-template>
       <input type="file" (change)="cargarArchivoTexto($event)" accept=".in" #inputTexto hidden/>
 
@@ -23,7 +29,7 @@
     <div class="file-input" (click)="inputProhibidas.click()">
       <label *ngIf="!inputProhibidas.value; else inputTextoLleno">Selecciona archivo de palabras prohibidas (.in):</label>
       <ng-template #inputProhibidasLleno>
-        <label>Archivo seleccionado</label>
+        <label>Archivo seleccionado. Cambiar archivo</label>
       </ng-template>
       <input  type="file" (change)="cargarArchivoProhibidas($event)" accept=".in" hidden #inputProhibidas/>
     </div>
@@ -35,7 +41,7 @@
     </div>
 
     <button class="procesar-button" [ngClass]="validaciones() ? '' : 'disabled'" (click)="procesarTexto()">Procesar</button>
-    <button *ngIf="form.get('texto')?.value?.length > 0" class="procesar-button" (click)="resetear(inputTexto, inputProhibidas)">Resetear</button>
+    <button *ngIf="form.get('texto')?.value?.length > 0" class="reset-button" (click)="resetear(inputTexto, inputProhibidas)">Resetear</button>
 
     <div *ngIf="resultado.length > 0" class="resultado-container">
       <h3>Resultados</h3>

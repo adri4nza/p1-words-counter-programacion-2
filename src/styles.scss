@@ -6,7 +6,22 @@
 
 body {
   font-family: 'Poppins', sans-serif;
-  background-color: #f3d9d9;
-  height: 100vh;
+  background-color: var(--color-medium-blue);
   padding: 2rem;
+}
+
+:root {
+  --color-white: #ffffff;
+  --color-black-translucent: rgba(0, 0, 0, 0.5); //box shadow
+
+  --color-light-gray: #f0f0f0; //fondo del file input
+  --color-medium-gray: #e0e0e0; //hover del file input
+  --color-dark-gray: #ccc; //border del file input
+  --color-darker-gray: #aaa; //hover del border del file input
+
+  --color-inner-shadow: rgba(0, 0, 0, 0.05);
+
+  --color-dark-blue: #5880a1;
+  --color-medium-blue: #3b566c;
+  --color-blue-translucent: rgba(46, 180, 64, 0.2);
 }

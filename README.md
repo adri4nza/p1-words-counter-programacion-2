@@ -1,27 +1,33 @@
-# P1WordsCounter
+# Analizador de Frecuencia de Palabras en Angular
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 18.1.4.
+Este proyecto es una aplicación web desarrollada con el framework **Angular** que permite analizar la frecuencia de aparición de palabras en un archivo de texto `.in`, ignorando aquellas que estén en una lista de **palabras prohibidas** también contenida en un archivo `.in`.
 
-## Development server
+## ¿Qué hace la app?
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+- Lee dos archivos `.in`:
+  - `texto.in`: contiene el texto a analizar (puede tener varias líneas).
+  - `prohibidas.in`: contiene palabras prohibidas, una por línea.
+- Limpia el texto (ignora signos de puntuación y mayúsculas).
+- Excluye las palabras prohibidas.
+- Cuenta las apariciones de cada palabra válida.
+- Muestra el resultado ordenado alfabéticamente.
+- Permite ordenar el resultado en orden de frecuencia descentendemente
+- Permite ver el contenido de los archivos cargados y editar el texto y las palabras prohibidas a analizar.
+---
 
-## Code scaffolding
+## ¿Cómo ejecutar localmente el proyecto?
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+1. Debes instalar los modulos de node, asi que debe tener instalado node. Enlace para instalar node: `https://nodejs.org/en`
+2. Teniendo node instalado, ubicarse con bash en la raiz del proyecto y ejecutar el comando `npm install`
+3. Luego de instalar los modulos, ejecutar el comando `npm start` o `ng serve`
 
-## Build
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+## Enlace de visualizacion en la nube
+El proyecto está actualmente hosteado en netlify, en el siguiente enlace: `https://words-counter-unet.netlify.app/`.
 
-## Running unit tests
+## Autor del proyecto
+Francisco Adrianza. C.I. V-29.928.573
+Estudiante de ingeniería informática de la Universidad Nacional Experimental del Táchira (UNET).
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
-
-## Running end-to-end tests
-
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
-
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+## Colaboraciones
+Para sugerir modificaciones al proyecto, te invito a solicitar un pull request en mi repositorio en github!!: 
