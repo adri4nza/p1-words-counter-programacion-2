@@ -1,7 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { RouterOutlet } from '@angular/router';
 
 @Component({
   selector: 'app-root',
@@ -20,15 +19,17 @@ export class AppComponent {
   palabrasProhibidas: string[] = [];
   resultado: {palabra: string, frecuencia: number}[] = [];
   form!: FormGroup;
-
+  formProhibida!: FormGroup;
 
   ngOnInit(): void {
     this.form = new FormGroup({
       texto: new FormControl(''),
-      palabrasProhibidas: new FormControl('')
+    });
+
+    this.formProhibida = new FormGroup({
+      nuevaProhibida: new FormControl(''),
     });
   }
-
 
   cargarArchivoTexto(event: Event): void {
     const archivo = (event.target as HTMLInputElement).files?.[0];
@@ -37,10 +38,12 @@ export class AppComponent {
       lector.onload = () => {
         this.texto =lector.result as string;
         this.form.get('texto')?.setValue(this.texto)
-
       }
+
       lector.readAsText(archivo)
     }
+
+    this.procesarTexto()
   }
 
   cargarArchivoProhibidas(event: Event): void {
@@ -58,17 +61,17 @@ export class AppComponent {
                               .toLocaleLowerCase()
                           );
 
-        this.form.get('palabrasProhibidas')?.setValue(palabras.join('\n'));
         this.palabrasProhibidas = palabras;
       }
+
       lector.readAsText(archivo);
     }
+
+    this.procesarTexto()
   }
 
   procesarTexto(): void {
-
-    this.updateProhibidas()
-
+    if(!this.validaciones()) return
 
     const frecuencia: {[palabra: string]: number} = {}
     const palabras = this.form.get('texto')?.value
@@ -76,9 +79,7 @@ export class AppComponent {
       .replace(/[.,!?]/g, '')
       .split(/\s+/)
       .filter((p: string) => p.length > 0 && this.palabrasProhibidas.indexOf(p) <0)
-
-
-      console.log(palabras);
+      // console.log(palabras);
 
       for(const palabra of palabras){
         frecuencia[palabra] = (frecuencia[palabra] || 0) + 1;
@@ -87,9 +88,29 @@ export class AppComponent {
       this.resultado = Object.keys(frecuencia)
         .sort()
         .map(p => ({palabra: p, frecuencia: frecuencia[p]}))
-
   }
 
+  onTextoChange(){
+    this.texto = this.form.get('texto')?.value;
+    this.resultado = [];
+    this.procesarTexto()
+  }
+
+  addProhibida(): void {
+    const nuevaProhibida = this.formProhibida.get('nuevaProhibida')?.value?.trim().toLowerCase();
+    // console.log(nuevaProhibida);
+    if (nuevaProhibida && !this.palabrasProhibidas.includes(nuevaProhibida)) {
+      this.palabrasProhibidas.push(nuevaProhibida);
+    }
+    this.formProhibida.get('nuevaProhibida')?.reset();
+    this.procesarTexto()
+  }
+
+  deleteProhibida(index: number): void {
+    // console.log('index,', index);
+    this.palabrasProhibidas.splice(index, 1);
+    this.procesarTexto()
+  }
 
   ordenarAlfabeticamente(): void {
     this.resultado.sort((a, b) => a.palabra.localeCompare(b.palabra));
@@ -99,13 +120,6 @@ export class AppComponent {
     this.resultado.sort((a, b) => b.frecuencia - a.frecuencia);
   }
 
-  updateProhibidas(){
-    const palabras = this.form.get('palabrasProhibidas')?.value.split(/\r?\n/).filter((p: string) => p.length > 0)
-    this.palabrasProhibidas = palabras.map((p: string) => p.trim().toLowerCase())
-    console.log(this.palabrasProhibidas);
-  }
-
-
   borrarArchivo(input: HTMLInputElement): void {
     input.value = '';
     if (input === this.form.get('archivoTexto')?.value) {
@@ -113,7 +127,7 @@ export class AppComponent {
     } else if (input === this.form.get('archivoProhibidas')?.value) {
       this.palabrasProhibidas = [];
     }
-    console.log('aarchivo borrado');
+    // console.log('aarchivo borrado');
   }
 
   resetear( inputTexto: HTMLInputElement, inputProhibidas: HTMLInputElement): void {
@@ -123,11 +137,10 @@ export class AppComponent {
     inputProhibidas.value = '';
     this.form.reset();
     this.resultado = [];
-
   }
 
   validaciones(): boolean{
-    return this.form.get('texto')?.value?.length > 0 && this.form.get('palabrasProhibidas')?.value?.length > 0
+    return this.form.get('texto')?.value?.length > 0 && this.palabrasProhibidas.length > 0
   }
 
 }

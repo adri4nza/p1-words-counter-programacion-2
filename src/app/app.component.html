@@ -11,19 +11,28 @@
     <h2>Analizador de frecuencia de palabras</h2>
     <hr>
 
-    <div class="file-input" (click)="inputTexto.click()">
-      <label *ngIf="!inputTexto.value; else inputTextoLleno">Selecciona archivo de texto a evaluar (.in):</label>
-      <ng-template #inputTextoLleno>
-        <label>Archivo seleccionado. Cambiar archivo</label>
-      </ng-template>
-      <input type="file" (change)="cargarArchivoTexto($event)" accept=".in" #inputTexto hidden/>
-
-    </div>
 
     <div class="input-filled">
       <label>Texto:</label>
       <textarea
-      formControlName="texto"  rows="5" cols="50" placeholder="Escribe o pega el texto aquí..."></textarea>
+      formControlName="texto" rows="5" cols="50" placeholder="Escribe o pega el texto aquí..." (input)="onTextoChange()"></textarea>
+    </div>
+    <div class="file-input" (click)="inputTexto.click()" (drop)="cargarArchivoTexto($event)">
+      <label *ngIf="!inputTexto.value; else inputTextoLleno">Selecciona archivo de texto a evaluar (.in):</label>
+      <ng-template #inputTextoLleno>
+        <label>Archivo seleccionado. Cambiar archivo</label>
+      </ng-template>
+      <input type="file" (drop)="cargarArchivoTexto($event)" (change)="cargarArchivoTexto($event)" accept=".in" #inputTexto hidden/>
+
+    </div>
+
+
+    <div class="input-filled">
+      <label>Palabras prohibidas:</label>
+      <form [formGroup]="formProhibida" (ngSubmit)="addProhibida()">
+        <input
+        formControlName="nuevaProhibida" placeholder="Añade palabras prohibidas..."/>
+      </form>
     </div>
 
     <div class="file-input" (click)="inputProhibidas.click()">
@@ -34,13 +43,18 @@
       <input  type="file" (change)="cargarArchivoProhibidas($event)" accept=".in" hidden #inputProhibidas/>
     </div>
 
-    <div class="input-filled">
-      <label>Palabras prohibidas:</label>
-      <textarea
-      formControlName="palabrasProhibidas"  rows="5" cols="50" placeholder="Escribe o pega el texto aquí..."></textarea>
-    </div>
+    @if (palabrasProhibidas.length > 0) {
+      <div class="prohibidas-container">
+        @for (prohibida of palabrasProhibidas; track $index) {
+          <div class="prohibida" *ngIf="prohibida.length > 0">
+            <span class="prohibida-text">{{ prohibida }}</span>
+            <button class="delete-button" (click)="deleteProhibida($index)">Eliminar</button>
+          </div>
+        }
+      </div>
+    }
 
-    <button class="procesar-button" [ngClass]="validaciones() ? '' : 'disabled'" (click)="procesarTexto()">Procesar</button>
+    <!-- <button class="procesar-button" [ngClass]="validaciones() ? '' : 'disabled'" (click)="procesarTexto()">Procesar</button> -->
     <button *ngIf="form.get('texto')?.value?.length > 0" class="reset-button" (click)="resetear(inputTexto, inputProhibidas)">Resetear</button>
 
     <div *ngIf="resultado.length > 0" class="resultado-container">
